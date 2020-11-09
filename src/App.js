@@ -1,6 +1,18 @@
 import React, { useState, useEffect }  from 'react';
 import ReactDOM from "react-dom";
 
+
+// Websocket
+var socket = new WebSocket("ws://" + location.host + "/ws/app");
+socket.addEventListener('open', function (event) {
+  console.log('Socket> open', socket.url);
+  // socket.send(42);  
+});
+socket.addEventListener('message', function (event) {
+  console.log('Socket> received', event.data);
+});
+
+
 /* Component as a class */
 class Welcome extends React.Component {
   render() {
@@ -15,20 +27,23 @@ function WelcomeAsFunction(props) {
 }
 
 /* Component as a function  with state and effect */
-function Button() {
+function Button(props) {
   // Create a value 'count', a function to modify it
   // Initial value is 0
   const [count, setCount] = useState(0);
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
-    // Update the document title using the browser API
-    document.title = `You clicked ${count} times`;
-  });
+
+    // If socket open, send data
+    if (socket.readyState == 1) {
+      socket.send(JSON.stringify({app: props.name, click: count}));
+    }
+  }, [count]); // only run when count is updated
 
   return (
     <div>
-      <p>You clicked {count} times</p>
+      <p>You clicked {props.name}: {count} times</p>
       <button onClick={() => setCount(count + 1)}>
         Click me
       </button>
@@ -36,14 +51,14 @@ function Button() {
   );
 }
 
-
 class App extends React.Component {
   constructor(props) {
-    console.log('Props', props)
+    console.log('Props', props);
+
     super(props);
-      this.state = {
-        date: new Date()
-      }
+    this.state = {
+      date: new Date()
+    }
   }
 
   componentDidMount() {
@@ -72,7 +87,8 @@ class App extends React.Component {
         <WelcomeAsFunction name="Judy"/>
         <p> Some text {this.state.date.toLocaleTimeString()}</p>
         <p> App prop: {this.props.value} </p>
-        <Button />
+        <Button name="button1"/>
+        <Button name="button2"/>
       </div>
     );
   }

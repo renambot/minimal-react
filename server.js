@@ -11,8 +11,9 @@ const compression = require('compression');
 const bodyParser  = require('body-parser');
 const cors        = require('cors');
 const morgan      = require('morgan');
-const qs          = require('querystring');
 const cookieParser = require('cookie-parser');
+
+const WebSocket = require('ws');
 
 // Exception
 process.on('unhandledRejection', (reason, p) =>
@@ -46,6 +47,8 @@ router.route('/home').get((req, res, next) => getHome(res, next));
 // all of our routes will be prefixed with /api
 app.use('/api', router);
 
+      
+
 // Create the HTTP server
 //   0.0.0.0 forces to listen on IPv4
 var httpServer = http.createServer(app);
@@ -56,7 +59,19 @@ httpServer.listen(8888, "0.0.0.0", function() {
 // Finally serve static content
 app.use(express.static("./dist/"));
 
+// Web sockets
+var wss = new WebSocket.Server({
+	server: httpServer
+});
+// Websocket routing
+wss.on('connection', function connection(ws, request, client) {
+	ws.on('message', function (message) {
+		console.log("WS message:", message);
+		ws.send(message + " got it");
+	});
 
+	console.log("WS connection:", request.url);
+});
 
 /**
  * Handler for the /home route
