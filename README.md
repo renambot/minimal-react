@@ -14,3 +14,4 @@ In one terminal:  `node server.js`
   
 In another: `yarn build`
   - web app is built into `dist` folder
+  - `yarn buildprod` builds a production build, better but slower.
