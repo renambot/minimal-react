@@ -1,9 +1,16 @@
 # minimal-react
 
-Installation: `yarn`
+Super minimal `react` environment. No automatic build. Run `webpack` to compile your code.
+Contains a simple webserver in nodejs.
+
+# Installation 
+
+Type `yarn`
+
+# Running
 
 In one terminal:  `node server.js`
-  reads web content from `dist` folder
+  - reads web content from `dist` folder
   
 In another: `yarn build`
-  web app is built into `dist` folder
+  - web app is built into `dist` folder
