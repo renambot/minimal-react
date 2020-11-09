@@ -3,6 +3,10 @@
 Super minimal `react` environment. No automatic build. Run `webpack` to compile your code.
 Contains a simple webserver in nodejs.
 
+Code:
+  - webserver: server.js
+  - React app: in `src`
+
 # Installation 
 
 Type `yarn`
