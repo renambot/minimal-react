@@ -22,7 +22,8 @@ class SAGE3Base extends React.Component {
     super(props);
     console.log('SAGE3Base constructor props', props)
     this.state = {
-      value: "toto"
+      value: "toto",
+      headerColor: "lightblue"
     }  
   }
 
@@ -43,6 +44,11 @@ class SAGE3Base extends React.Component {
     return true;
   }
   
+  changeColor(e) {
+    var randomColor = Math.floor(Math.random()*16777215).toString(16);
+    this.setState({headerColor: "#" + randomColor});
+  }
+
   render() {
     // console.log('SAGE3Base render props', this.props)
     let top  = this.props.position[1];
@@ -57,8 +63,11 @@ class SAGE3Base extends React.Component {
         background:"white"}}>
 
         {/* top menubar */}
-        <div style={{border: "1px", borderStyle: "solid", borderColor: "blue", background:"lightblue",
-        position: "relative", top: "-30px", left: "0px", width: w, height: "25px"}}>
+        <div style={{border: "1px", borderStyle: "solid", borderColor: "blue",
+          background:this.state.headerColor,
+          position: "relative", top: "-30px", left: "0px", width: w, height: "25px"}}
+          onClick={ (e) => this.changeColor(e) }
+          >
             Title bar - {this.props.name}
         </div>
           
@@ -193,10 +202,10 @@ class Container extends React.Component {
 
   componentDidMount() {
     console.log('Container Mount', this.props);
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
+    // this.timerID = setInterval(
+    //   () => this.tick(),
+    //   1000
+    // );
   }
 
   componentWillUnmount() {
